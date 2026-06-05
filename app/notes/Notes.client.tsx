@@ -1,14 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  useQuery,
-  keepPreviousData,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { useDebouncedCallback } from 'use-debounce';
-import { deleteNote } from '../../lib/api';
 
 import css from './Notes.module.css';
 
@@ -37,17 +31,17 @@ export default function NotesClient() {
     setPage(1);
   }, 500);
 
-  const queryClient = useQueryClient();
-  const deleteMutation = useMutation({
-    mutationFn: deleteNote,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notes'] });
-    },
-  });
+  // const queryClient = useQueryClient();
+  // const deleteMutation = useMutation({
+  //   mutationFn: deleteNote,
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ['notes'] });
+  //   },
+  // });
 
-  const handleDelete = (id: string) => {
-    deleteMutation.mutate(id);
-  };
+  // const handleDelete = (id: string) => {
+  //   deleteMutation.mutate(id);
+  // };
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
@@ -66,9 +60,7 @@ export default function NotesClient() {
 
       {isLoading && <p>Loading notes...</p>}
       {isError && <p>Something went wrong...</p>}
-      {data && data.notes.length > 0 && (
-        <NoteList notes={data.notes} onDelete={handleDelete} />
-      )}
+      {data && data.notes.length > 0 && <NoteList notes={data.notes} />}
 
       {isModalOpen && (
         <Modal onClose={() => setIsModalOpen(false)}>
